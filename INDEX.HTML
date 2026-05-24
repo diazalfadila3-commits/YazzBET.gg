@@ -1,0 +1,1572 @@
+</head><div class="top-right">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+
+ <!-- LOGO -->
+<div class="logo">
+
+  <div class="logo-icon">
+    🎰
+  </div>
+
+  <div class="logo-text">
+
+    <span class="logo-main">
+      Yazz
+    </span>
+
+    <span class="logo-accent">
+      Bet
+    </span>
+
+  </div>
+
+</div>
+
+  <!-- RIGHT -->
+<div class="top-right">
+
+  <!-- ACCOUNT -->
+  <!-- ACCOUNT -->
+<div class="account-wrapper">
+
+  <div
+  class="account-box"
+  onclick="toggleProfileMenu()">
+
+    <div class="account-top">
+
+      <div>
+
+        <div class="account-name"
+        id="usernameText">
+          Guest
+        </div>
+
+        <div class="account-level">
+
+          LVL
+          <span id="levelText">
+            1
+          </span>
+
+        </div>
+
+      </div>
+
+      <div class="account-arrow">
+        ▼
+      </div>
+
+    </div>
+
+    <div class="xp-bar">
+
+      <div
+      class="xp-fill"
+      id="xpFill">
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- DROPDOWN -->
+  <div
+  class="profile-dropdown"
+  id="profileDropdown">
+
+    <div class="profile-header">
+
+      <div class="profile-avatar">
+        👤
+      </div>
+
+      <div>
+
+        <div class="profile-name"
+        id="profileName">
+          Guest
+        </div>
+
+        <div 
+class="profile-level"
+id="profileLevel">
+  Level 1 Player
+</div>
+
+      </div>
+
+    </div>
+
+    <div class="dropdown-divider"></div>
+
+    <button class="dropdown-item">
+      🏆 VIP Rewards
+    </button>
+
+    <button class="dropdown-item">
+      💳 Deposit
+    </button>
+
+    <button class="dropdown-item">
+      📜 History
+    </button>
+
+    <button class="dropdown-item logout">
+      🚪 Logout
+    </button>
+
+  </div>
+
+</div>
+
+    <!-- BALANCE -->
+    <div class="balance-box">
+
+      💰
+      <span id="balanceText">
+        1000
+      </span>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- LIVE CHAT BUTTON -->
+<div class="live-chat-btn" onclick="toggleChat()">
+
+  💬
+
+</div>
+
+<!-- LIVE CHAT BOX -->
+<div class="live-chat-box" id="liveChat">
+
+  <!-- HEADER -->
+  <div class="chat-header">
+
+    <div class="chat-user">
+
+      <div class="chat-avatar">
+        🎧
+      </div>
+
+      <div>
+
+        <div class="chat-title">
+          YazzBet Support
+        </div>
+
+        <div class="chat-status">
+          ● Online
+        </div>
+
+      </div>
+
+    </div>
+
+    <button
+    class="chat-close"
+    onclick="toggleChat()">
+      ✕
+    </button>
+
+  </div>
+
+  <!-- CHAT BODY -->
+  <div class="chat-body" id="chatBody">
+
+    <div class="chat-message support">
+
+      👋 Halo! Selamat datang di
+      YazzBet.
+
+    </div>
+
+    <div class="chat-message support">
+
+      Ada yang bisa kami bantu?
+
+    </div>
+
+  </div>
+
+  <!-- INPUT -->
+  <div class="chat-input-area">
+
+    <input
+    type="text"
+    id="chatInput"
+    placeholder="Ketik pesan..."
+
+    onkeypress="
+    if(event.key==='Enter')
+    sendMessage()">
+
+    <button
+    onclick="sendMessage()">
+
+      SEND
+
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+  
+/* LOAD ACCOUNT *//*
+
+/* USERNAME */
+let username =
+localStorage.getItem(
+  "rouletteUsername"
+);
+
+if(!username){
+
+  username = "YazzX";
+
+  localStorage.setItem(
+    "rouletteUsername",
+    username
+  );
+}
+
+/* LEVEL */
+let level =
+Number(
+  localStorage.getItem(
+    "rouletteLevel"
+  )
+) || 1;
+
+/* XP */
+let xp =
+Number(
+  localStorage.getItem(
+    "rouletteXP"
+  )
+) || 0;
+
+/* UPDATE UI */
+document.getElementById(
+  "usernameText"
+).innerHTML = username;
+
+document.getElementById(
+  "profileName"
+).innerHTML = username;
+
+/* RANK */
+let rank = "Bronze";
+
+if(level >= 10){
+  rank = "Silver";
+}
+
+if(level >= 25){
+  rank = "Gold";
+}
+
+if(level >= 50){
+  rank = "Diamond";
+}
+
+/* LEVEL */
+document.getElementById(
+  "levelText"
+).innerHTML = level;
+
+document.getElementById(
+  "profileLevel"
+).innerHTML =
+"Level " +
+level +
+" • " +
+rank;
+
+/* XP */
+const needXP =
+level * 100;
+
+const percent =
+(xp / needXP) * 100;
+
+document.getElementById(
+  "xpFill"
+).style.width =
+percent + "%";
+
+/* TOGGLE CHAT */
+function toggleChat(){
+
+  const chat =
+  document.getElementById(
+    "liveChat"
+  );
+
+  if(
+    chat.style.display === "flex"
+  ){
+
+    chat.style.display = "none";
+
+  }else{
+
+    chat.style.display = "flex";
+
+  }
+}
+
+/* SEND MESSAGE */
+function sendMessage(){
+
+  const input =
+  document.getElementById(
+    "chatInput"
+  );
+
+  const body =
+  document.getElementById(
+    "chatBody"
+  );
+
+  const text =
+  input.value.trim();
+
+  if(!text){
+    return;
+  }
+
+  /* USER MESSAGE */
+  const msg =
+  document.createElement("div");
+
+  msg.className =
+  "chat-message user";
+
+  msg.innerHTML = text;
+
+  body.appendChild(msg);
+
+  input.value = "";
+
+  body.scrollTop =
+  body.scrollHeight;
+
+  /* AUTO REPLY */
+  setTimeout(()=>{
+
+    const reply =
+    document.createElement("div");
+
+    reply.className =
+    "chat-message support";
+
+    reply.innerHTML =
+    "Terima kasih, admin akan membalas sebentar lagi 😊";
+
+    body.appendChild(reply);
+
+    body.scrollTop =
+    body.scrollHeight;
+
+  }, 1000);
+
+}
+
+</script>
+
+<!-- HOME -->
+<div class="casino-home">
+
+  <div class="game-grid">
+
+    <!-- ROULETTE -->
+    <a
+    href="roulette.html"
+    class="card roulette">
+
+      <div class="big-icon">
+        🎡
+      </div>
+
+      <div class="game-title">
+        ROULETTE
+      </div>
+
+      <div class="game-sub">
+        Spin & Win Big
+      </div>
+
+    </a>
+
+    <!-- MINES -->
+    <a
+    href="mines.html"
+    class="card mines">
+
+      <div class="big-icon">
+        💣
+      </div>
+
+      <div class="game-title">
+        MINES
+      </div>
+
+      <div class="game-sub">
+        Avoid The Bombs
+      </div>
+
+    </a>
+
+  </div>
+
+</div>
+
+<script>
+
+/* LOAD GLOBAL BALANCE */
+let balance =
+localStorage.getItem(
+  "rouletteBalance"
+)
+? Number(
+    localStorage.getItem(
+      "rouletteBalance"
+    )
+  )
+: 1000;
+
+/* UPDATE UI */
+document.getElementById(
+  "balanceText"
+).innerHTML = balance;
+
+// DATABASE PROMO
+const promoCodes = {
+
+  "YAZZBET": 500000,
+
+  "FREE100": 100000,
+
+  "WELCOME": 250000,
+
+  "CASEBET": 750000,
+
+  "PLAYERBARU": 1000000
+
+};
+
+/* CLAIM PROMO */
+function claimPromo(){
+
+  const code =
+  prompt(
+    "Masukkan Promo Code"
+  );
+
+  if(!code){
+    return;
+  }
+
+  /* HAPUS SPASI + UPPERCASE */
+  const promo =
+  code.trim().toUpperCase();
+
+  /* VALIDASI */
+  if(
+    promoCodes.hasOwnProperty(promo)
+  ){
+
+    /* SUDAH DIGUNAKAN */
+    if(
+      localStorage.getItem(
+        "promo_" + promo
+      )
+    ){
+
+      alert(
+        "Promo sudah digunakan!"
+      );
+
+      return;
+    }
+
+    /* REWARD */
+    const reward =
+    promoCodes[promo];
+
+    balance += reward;
+
+    /* SAVE */
+    localStorage.setItem(
+      "rouletteBalance",
+      balance
+    );
+
+    localStorage.setItem(
+      "promo_" + promo,
+      "used"
+    );
+
+    /* UPDATE UI */
+    document.getElementById(
+      "balanceText"
+    ).innerHTML = balance;
+
+    alert(
+      "Berhasil claim +" +
+      reward
+    );
+
+  }else{
+
+    alert(
+      "Promo tidak valid!"
+    );
+  
+  }
+
+  /* UPDATE UI */
+  document.getElementById(
+    "balanceText"
+  ).innerHTML = balance;
+
+  alert(
+    "Berhasil claim +" +
+    reward
+  );
+}
+
+
+
+</script>
+<script>
+
+/* TOGGLE PROFILE MENU */
+function toggleProfileMenu(){
+
+  const menu =
+  document.getElementById(
+    "profileDropdown"
+  );
+
+  menu.classList.toggle(
+    "show-profile"
+  );
+}
+
+/* CLOSE IF CLICK OUTSIDE */
+window.addEventListener(
+  "click",
+  function(e){
+
+    const wrapper =
+    document.querySelector(
+      ".account-wrapper"
+    );
+
+    if(
+      !wrapper.contains(e.target)
+    ){
+
+      document
+      .getElementById(
+        "profileDropdown"
+      )
+      .classList.remove(
+        "show-profile"
+      );
+
+    }
+
+  }
+);
+
+document.getElementById(
+  "profileName"
+).innerHTML = username;
+
+</script>
+</body>
+<style>
+  /* TOPBAR */
+/* TOPBAR */
+.topbar{
+  position:absolute;
+  top:0;
+  left:0;
+
+  width:100%;
+  height:70px;
+
+  padding:0 18px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  background:
+  rgba(10,10,20,0.6);
+
+  backdrop-filter:blur(10px);
+
+  border-bottom:
+  1px solid rgba(255,255,255,0.08);
+
+  z-index:100;
+}
+
+/* RIGHT MENU */
+.top-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  margin-right:10px;
+}
+
+/* ACCOUNT BOX */
+.account-box{
+
+  background:#1b2134;
+
+  padding:12px 18px;
+
+  border-radius:16px;
+
+  min-width:240px; /* lebih panjang */
+
+  height:58px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+
+  border:
+  1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+  0 0 15px rgba(0,0,0,0.25);
+}
+
+/* NAME */
+.account-name{
+
+  font-size:17px;
+  font-weight:bold;
+
+  color:white;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* LEVEL */
+.account-level{
+
+  margin-top:5px;
+
+  font-size:13px;
+
+  color:#ffd700;
+
+  font-weight:bold;
+
+  letter-spacing:1px;
+}
+
+/* XP BAR */
+.xp-bar{
+
+  width:100%;
+  height:8px;
+
+  background:#111526;
+
+  border-radius:20px;
+
+  overflow:hidden;
+
+  margin-top:8px;
+}
+
+.xp-fill{
+
+  width:40%;
+
+  height:100%;
+
+  background:
+  linear-gradient(
+    90deg,
+    #22c55e,
+    #16a34a
+  );
+
+  border-radius:20px;
+
+  transition:0.3s;
+}
+
+/* BALANCE */
+.balance-box{
+
+  background:#1b2134;
+
+  padding:10px 16px;
+
+  border-radius:12px;
+
+  color:white;
+
+  font-size:18px;
+  font-weight:bold;
+
+  min-width:110px;
+
+  text-align:center;
+}
+
+/* PROMO BUTTON */
+.promo-btn{
+
+  padding:10px 16px;
+
+  border:none;
+
+  border-radius:12px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #f59e0b,
+    #ef4444
+  );
+
+  color:white;
+
+  font-size:16px;
+  font-weight:bold;
+
+  cursor:pointer;
+
+
+  transition:0.2s;
+}
+.promo-btn:hover{
+  transform:translateY(-3px);
+  opacity:0.95;
+}
+
+/* HOME */
+.casino-home{
+  width:100%;
+  height:100vh;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+body{
+  width:100%;
+  height:100vh;
+
+  background:
+  linear-gradient(
+    rgba(0,0,0,0.78),
+    rgba(0,0,0,0.78)
+  ),
+
+  url("https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1600");
+
+  background-size:cover;
+  background-position:center;
+
+  overflow:hidden;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* CARD */
+.card{
+  width:420px;
+  height:420px;
+
+  text-decoration:none;
+
+  border-radius:35px;
+
+  display:flex;
+  flex-direction:column;
+
+  justify-content:center;
+  align-items:center;
+
+  color:white;
+
+  transition:0.25s;
+
+  position:relative;
+
+  overflow:hidden;
+
+  border:
+  4px solid rgba(255,255,255,0.12);
+
+  backdrop-filter:blur(5px);
+
+  box-shadow:
+  0 0 40px rgba(0,0,0,0.5);
+}
+
+.card:hover{
+  transform:
+  translateY(-10px)
+  scale(1.03);
+}
+
+/* ICON */
+.big-icon{
+  font-size:170px;
+
+  margin-bottom:25px;
+
+  text-shadow:
+  0 0 30px rgba(255,255,255,0.45);
+}
+
+/* TITLE */
+.game-title{
+  font-size:55px;
+  font-weight:bold;
+
+  letter-spacing:2px;
+}
+
+/* SUB */
+.game-sub{
+  margin-top:12px;
+
+  font-size:22px;
+
+  color:#ddd;
+}
+
+/* ROULETTE */
+.roulette{
+  background:
+  linear-gradient(
+    135deg,
+    rgba(79,70,229,0.9),
+    rgba(124,58,237,0.9)
+  );
+}
+
+.roulette:hover{
+  box-shadow:
+  0 0 60px rgba(124,58,237,0.85);
+}
+
+/* MINES */
+.mines{
+  background:
+  linear-gradient(
+    135deg,
+    rgba(15,118,110,0.92),
+    rgba(22,163,74,0.92)
+  );
+}
+
+.mines:hover{
+  box-shadow:
+  0 0 60px rgba(34,197,94,0.85);
+}
+
+/* GRID */
+.game-grid{
+  display:flex;
+  gap:45px;
+}
+
+/* LOGO */
+.logo{
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  cursor:pointer;
+
+  user-select:none;
+}
+
+/* ICON */
+.logo-icon{
+
+  width:48px;
+  height:48px;
+
+  border-radius:14px;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  font-size:28px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #6d28ff,
+    #9333ea
+  );
+
+  box-shadow:
+  0 0 20px rgba(147,51,234,0.45);
+
+  border:
+  2px solid rgba(255,255,255,0.12);
+}
+
+/* TEXT */
+.logo-text{
+
+  font-size:38px;
+  font-weight:bold;
+
+  letter-spacing:1px;
+}
+
+/* YAZZ */
+.logo-main{
+
+  color:white;
+
+  text-shadow:
+  0 0 15px rgba(255,255,255,0.25);
+}
+
+/* BET */
+.logo-accent{
+
+  color:#a855f7;
+
+  margin-left:3px;
+
+  text-shadow:
+  0 0 18px rgba(168,85,247,0.8);
+}
+
+
+/* LIVE CHAT BUTTON */
+.live-chat-btn{
+
+  position:fixed;
+
+  right:25px;
+  bottom:25px;
+
+  width:70px;
+  height:70px;
+
+  border-radius:50%;
+
+  background:
+  linear-gradient(
+    135deg,
+    #7c3aed,
+    #9333ea
+  );
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  font-size:32px;
+
+  cursor:pointer;
+
+  z-index:9999;
+
+  box-shadow:
+  0 0 25px rgba(147,51,234,0.65);
+
+  transition:0.25s;
+}
+
+.live-chat-btn:hover{
+
+  transform:
+  scale(1.08)
+  translateY(-4px);
+}
+
+/* CHAT BOX */
+.live-chat-box{
+
+  position:fixed;
+
+  right:25px;
+  bottom:110px;
+
+  width:360px;
+  height:520px;
+
+  background:
+  rgba(18,22,35,0.98);
+
+  border-radius:24px;
+
+  overflow:hidden;
+
+  display:none;
+  flex-direction:column;
+
+  z-index:9999;
+
+  border:
+  1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(12px);
+
+  box-shadow:
+  0 0 40px rgba(0,0,0,0.6);
+}
+
+/* HEADER */
+.chat-header{
+
+  height:80px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #6d28ff,
+    #9333ea
+  );
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 18px;
+}
+
+/* USER */
+.chat-user{
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+/* AVATAR */
+.chat-avatar{
+
+  width:50px;
+  height:50px;
+
+  border-radius:50%;
+
+  background:
+  rgba(255,255,255,0.15);
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  font-size:26px;
+}
+
+/* TITLE */
+.chat-title{
+
+  color:white;
+
+  font-size:18px;
+  font-weight:bold;
+}
+
+/* STATUS */
+.chat-status{
+
+  color:#7CFFB2;
+
+  margin-top:4px;
+
+  font-size:13px;
+}
+
+/* CLOSE */
+.chat-close{
+
+  background:none;
+  border:none;
+
+  color:white;
+
+  font-size:24px;
+
+  cursor:pointer;
+}
+
+/* BODY */
+.chat-body{
+
+  flex:1;
+
+  padding:16px;
+
+  overflow-y:auto;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:12px;
+}
+
+/* MESSAGE */
+.chat-message{
+
+  max-width:80%;
+
+  padding:14px 16px;
+
+  border-radius:18px;
+
+  line-height:1.4;
+
+  font-size:15px;
+}
+
+/* SUPPORT */
+.support{
+
+  background:#2b3350;
+
+  color:white;
+
+  align-self:flex-start;
+
+  border-bottom-left-radius:6px;
+}
+
+/* USER MESSAGE */
+.user{
+
+  background:
+  linear-gradient(
+    135deg,
+    #6d28ff,
+    #9333ea
+  );
+
+  color:white;
+
+  align-self:flex-end;
+
+  border-bottom-right-radius:6px;
+}
+
+/* INPUT AREA */
+.chat-input-area{
+
+  height:80px;
+
+  display:flex;
+  align-items:center;
+
+  padding:15px;
+
+  gap:10px;
+
+  background:#171b2b;
+}
+
+/* INPUT */
+.chat-input-area input{
+
+  flex:1;
+
+  height:50px;
+
+  border:none;
+
+  border-radius:14px;
+
+  background:#232a42;
+
+  padding:0 16px;
+
+  color:white;
+
+  font-size:15px;
+
+  outline:none;
+}
+
+/* SEND BUTTON */
+.chat-input-area button{
+
+  height:50px;
+
+  padding:0 18px;
+
+  border:none;
+
+  border-radius:14px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #7c3aed,
+    #9333ea
+  );
+
+  color:white;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+  transition:0.2s;
+}
+
+.chat-input-area button:hover{
+
+  opacity:0.92;
+
+  transform:translateY(-2px);
+}
+
+/* =========================
+   RESPONSIVE MOBILE
+========================= */
+@media screen and (max-width: 900px){
+
+  body{
+    overflow:auto;
+  }
+
+  /* TOPBAR */
+  .topbar{
+    height:65px;
+    padding:0 12px;
+  }
+
+  /* LOGO */
+  .logo-text{
+    font-size:28px;
+  }
+
+  .logo-icon{
+    width:42px;
+    height:42px;
+    font-size:24px;
+  }
+
+  /* BALANCE */
+  .balance-box{
+    min-width:auto;
+    padding:8px 12px;
+    font-size:15px;
+  }
+
+  /* PROMO */
+  .promo-btn{
+    padding:8px 12px;
+    font-size:14px;
+  }
+
+  /* HOME */
+  .casino-home{
+    padding-top:90px;
+    padding-bottom:40px;
+    height:auto;
+  }
+
+  /* GRID */
+  .game-grid{
+    flex-direction:column;
+    gap:25px;
+    width:100%;
+    align-items:center;
+  }
+
+  /* CARD */
+  .card{
+    width:92%;
+    max-width:380px;
+    height:300px;
+    border-radius:28px;
+  }
+
+  /* ICON */
+  .big-icon{
+    font-size:110px;
+    margin-bottom:15px;
+  }
+
+  /* TITLE */
+  .game-title{
+    font-size:38px;
+  }
+
+  /* SUB */
+  .game-sub{
+    font-size:18px;
+  }
+
+  /* LIVE CHAT */
+  .live-chat-box{
+    width:95%;
+    right:2.5%;
+    bottom:95px;
+    height:500px;
+  }
+
+  .live-chat-btn{
+    width:62px;
+    height:62px;
+    font-size:28px;
+    right:18px;
+    bottom:18px;
+  }
+
+}
+
+@media screen and (max-width: 900px){
+
+  .top-right{
+    gap:8px;
+  }
+
+  .account-box{
+
+    min-width:170px;
+
+    padding:10px 12px;
+
+    height:auto;
+  }
+
+  .account-name{
+    font-size:14px;
+  }
+
+  .account-level{
+    font-size:11px;
+  }
+
+}
+
+/* WRAPPER */
+.account-wrapper{
+  position:relative;
+}
+
+/* ACCOUNT */
+.account-box{
+  cursor:pointer;
+  transition:0.25s;
+}
+
+.account-box:hover{
+  transform:translateY(-2px);
+  background:#222b45;
+}
+
+/* TOP */
+.account-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+/* ARROW */
+.account-arrow{
+  color:#aaa;
+  font-size:12px;
+}
+
+/* DROPDOWN */
+.profile-dropdown{
+
+  position:absolute;
+
+  top:75px;
+  right:0;
+
+  width:260px;
+
+  background:
+  rgba(20,24,38,0.98);
+
+  border-radius:18px;
+
+  padding:14px;
+
+  display:none;
+
+  flex-direction:column;
+
+  gap:10px;
+
+  border:
+  1px solid rgba(255,255,255,0.08);
+
+  backdrop-filter:blur(12px);
+
+  box-shadow:
+  0 0 30px rgba(0,0,0,0.45);
+
+  z-index:999;
+}
+
+/* SHOW */
+.show-profile{
+  display:flex;
+}
+
+/* HEADER */
+.profile-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+/* AVATAR */
+.profile-avatar{
+
+  width:52px;
+  height:52px;
+
+  border-radius:50%;
+
+  background:
+  linear-gradient(
+    135deg,
+    #7c3aed,
+    #9333ea
+  );
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  font-size:24px;
+
+  color:white;
+}
+
+/* NAME */
+.profile-name{
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+}
+
+/* LEVEL */
+.profile-level{
+  color:#aaa;
+  margin-top:4px;
+  font-size:13px;
+}
+
+/* DIVIDER */
+.dropdown-divider{
+  width:100%;
+  height:1px;
+  background:
+  rgba(255,255,255,0.08);
+}
+
+/* ITEM */
+.dropdown-item{
+
+  height:46px;
+
+  border:none;
+
+  border-radius:12px;
+
+  background:#232a42;
+
+  color:white;
+
+  text-align:left;
+
+  padding:0 14px;
+
+  font-size:15px;
+
+  cursor:pointer;
+
+  transition:0.2s;
+}
+
+.dropdown-item:hover{
+
+  background:#2f3858;
+
+  transform:translateX(4px);
+}
+
+/* LOGOUT */
+.logout{
+
+  background:
+  rgba(239,68,68,0.15);
+
+  color:#ff8080;
+}
+
+.logout:hover{
+
+  background:
+  rgba(239,68,68,0.28);
+}
+
+</style>
+
+  let rank = "Bronze";
+
+if(level >= 10){
+  rank = "Silver";
+}
+
+if(level >= 25){
+  rank = "Gold";
+}
+
+if(level >= 50){
+  rank = "Diamond";
+}
+
+document.getElementById(
+  "profileLevel"
+).innerHTML =
+"Level " + level + " • " + rank;
+
+
+
+  "rouletteUsername",
+  "YazzPlayer"
+
+</script>

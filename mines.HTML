@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>YazzBet Mines</title>
+
+<style>
+
+/* PROMO BUTTON */
+.promo-btn{
+  width:100%;
+  margin-top:15px;
+  padding:16px;
+  border:none;
+  border-radius:12px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #f59e0b,
+    #ef4444
+  );
+
+  color:white;
+
+  font-size:18px;
+  font-weight:bold;
+
+  cursor:pointer;
+
+  transition:0.2s;
+}
+
+.promo-btn:hover{
+  transform:translateY(-2px);
+  opacity:0.92;
+}
+
+/* DISABLED */
+.play-btn:disabled{
+  opacity:0.5;
+  cursor:not-allowed;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+
+body{
+  background:
+  linear-gradient(
+    rgba(0,0,0,0.75),
+    rgba(0,0,0,0.75)
+  ),
+  url("https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1600");
+
+  background-size:cover;
+  background-position:center;
+
+  color:white;
+  overflow:hidden;
+}
+
+/* MAIN */
+.main{
+  width:100%;
+  height:100vh;
+  display:flex;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:340px;
+  min-width:340px;
+  background:rgba(20,25,40,0.92);
+  border-right:2px solid #2b3350;
+  padding:20px;
+  overflow-y:auto;
+}
+
+/* BALANCE */
+.balance-box{
+  background:#20263a;
+  padding:15px;
+  border-radius:14px;
+  margin-bottom:20px;
+  font-size:22px;
+  font-weight:bold;
+  text-align:center;
+}
+
+/* PROFILE */
+.profile-box{
+  background:#20263a;
+  padding:15px;
+  border-radius:14px;
+  margin-bottom:20px;
+}
+
+.profile-name{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.profile-level{
+  margin-top:5px;
+  color:#ffd700;
+  font-weight:bold;
+}
+
+.xp-bar{
+  width:100%;
+  height:12px;
+  background:#111526;
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.xp-fill{
+  width:0%;
+  height:100%;
+  background:#00c853;
+  transition:0.3s;
+}
+
+.xp-text{
+  margin-top:8px;
+  font-size:14px;
+  color:#bbb;
+}
+
+/* BET BOX */
+.bet-box{
+  display:grid;
+  grid-template-columns:
+  1fr 60px 60px 60px;
+  gap:8px;
+}
+
+.bet-input{
+  width:100%;
+  height:52px;
+  background:#20263a;
+  border:none;
+  border-radius:12px;
+  padding:0 15px;
+  color:white;
+  font-size:18px;
+}
+
+.bet-btn-small{
+  height:52px;
+  border:none;
+  border-radius:12px;
+  background:#2a3350;
+  color:white;
+  font-weight:bold;
+  font-size:15px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.bet-btn-small:hover{
+  background:#3a4670;
+  transform:translateY(-2px);
+}
+
+/* LABEL */
+.label{
+  margin-top:20px;
+  margin-bottom:10px;
+  font-size:14px;
+  font-weight:bold;
+  color:#ddd;
+}
+
+/* SLIDER */
+.slider{
+  width:100%;
+  accent-color:#6d28ff;
+}
+
+.center-value{
+  text-align:center;
+  margin-top:10px;
+  font-weight:bold;
+  font-size:18px;
+}
+
+/* PLAY BUTTON */
+.play-btn{
+  width:100%;
+  height:60px;
+  border:none;
+  border-radius:12px;
+  background:#6d28ff;
+  color:white;
+  font-size:20px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:20px;
+  transition:0.2s;
+}
+
+.play-btn:hover{
+  opacity:0.9;
+  transform:translateY(-2px);
+}
+
+/* CASHOUT */
+.cashout-btn{
+  width:100%;
+  margin-top:15px;
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  background:#16a34a;
+  color:white;
+  font-size:20px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* RESULT */
+.result{
+  margin-top:15px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+}
+
+.win{
+  color:#00ff99;
+}
+
+.lose{
+  color:#ff4d4d;
+}
+
+/* BOARD */
+.board-area{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:auto;
+  padding:20px;
+}
+
+.board{
+  display:grid;
+  gap:8px;
+  justify-content:center;
+}
+
+/* TILE */
+.tile{
+  background:#434c72;
+  border-radius:10px;
+  border-bottom:5px solid #2f3552;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  font-size:28px;
+
+  cursor:pointer;
+
+  transition:0.15s;
+}
+
+.tile:hover{
+  transform:translateY(-3px);
+}
+
+.safe{
+  background:#16a34a;
+  border-bottom:5px solid #166534;
+}
+
+.mine{
+  background:#dc2626;
+  border-bottom:5px solid #991b1b;
+}
+
+/* MULTIPLIER */
+.multi-box{
+  margin-top:20px;
+  background:#20263a;
+  padding:15px;
+  border-radius:14px;
+  text-align:center;
+}
+
+.multi-title{
+  color:#bbb;
+  margin-bottom:8px;
+}
+
+.multi-value{
+  font-size:30px;
+  font-weight:bold;
+  color:#00ff99;
+}
+
+</style>
+</head>
+
+<!-- PROMO POPUP -->
+<div
+class="promo-popup-bg"
+id="promoPopup"
+style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+justify-content:center;
+align-items:center;
+z-index:999;
+">
+
+  <div
+  style="
+  width:350px;
+  background:#1b2134;
+  padding:25px;
+  border-radius:18px;
+  text-align:center;
+  ">
+
+    <h2 style="margin-bottom:20px;">
+      🎁 PROMO CODE
+    </h2>
+
+    <input
+    type="text"
+    id="promoInput"
+    placeholder="Masukkan promo"
+    style="
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#111526;
+    color:white;
+    margin-bottom:15px;
+    font-size:16px;
+    ">
+
+    <button
+    onclick="claimPromo()"
+    style="
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#16a34a;
+    color:white;
+    font-weight:bold;
+    margin-bottom:10px;
+    cursor:pointer;
+    ">
+      CLAIM
+    </button>
+
+    <button
+    onclick="closePromo()"
+    style="
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#dc2626;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    ">
+      CLOSE
+    </button>
+
+  </div>
+
+</div>
+
+<body>
+
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- BALANCE -->
+    <div class="balance-box">
+      💰 <span id="balance">1000</span>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="profile-box">
+
+      <div class="profile-name" id="usernameText">
+        Guest
+      </div>
+
+      <div class="profile-level">
+        LVL <span id="levelText">1</span>
+      </div>
+
+      <div class="xp-bar">
+        <div
+        class="xp-fill"
+        id="xpFill">
+        </div>
+      </div>
+
+      <div class="xp-text">
+        XP:
+        <span id="xpText">0</span>
+        /
+        <span id="xpNeed">100</span>
+      </div>
+
+    </div>
+
+    <!-- BET -->
+    <div class="bet-box">
+
+      <input
+      type="number"
+      id="betInput"
+      class="bet-input"
+      value="50">
+
+      <button
+      class="bet-btn-small"
+      onclick="halfBet()">
+        1/2
+      </button>
+
+      <button
+      class="bet-btn-small"
+      onclick="doubleBet()">
+        x2
+      </button>
+
+      <button
+      class="bet-btn-small"
+      onclick="maxBet()">
+        MAX
+      </button>
+
+    </div>
+
+    <!-- GRID -->
+    <div class="label">
+      GRID SIZE
+    </div>
+
+    <input
+    type="range"
+    min="5"
+    max="10"
+    value="5"
+    class="slider"
+    id="gridSlider"
+    oninput="updateGridText()">
+
+    <div
+    class="center-value"
+    id="gridText">
+      5 x 5
+    </div>
+
+    <!-- MINES -->
+    <div class="label">
+      AMOUNT OF MINES
+    </div>
+
+    <input
+    type="range"
+    min="1"
+    max="24"
+    value="3"
+    class="slider"
+    id="mineSlider"
+    oninput="updateMineText()">
+
+    <div
+    class="center-value"
+    id="mineText">
+      3
+    </div>
+
+    <!-- MULTIPLIER -->
+    <div class="multi-box">
+
+      <div class="multi-title">
+        MULTIPLIER
+      </div>
+
+      <div
+      class="multi-value"
+      id="multiText">
+        x1.00
+      </div>
+
+    </div>
+
+    <!-- BET BUTTON -->
+    <!-- BET BUTTON -->
+<button
+class="play-btn"
+id="playBtn"
+onclick="startGame()">
+  BET
+</button>
+
+<!-- CASHOUT -->
+<button
+class="cashout-btn"
+onclick="cashout()">
+  CASHOUT
+</button>
+
+<!-- PROMO BUTTON -->
+ 
+<button
+class="promo-btn"
+onclick="openPromo()">
+  🎁 PROMO CODE
+</button>
+
+<!-- RESULT -->
+<div
+class="result"
+id="result">
+</div>
+
+    <!-- RESULT -->
+    <div
+    class="result"
+    id="result">
+    </div>
+
+  </div>
+
+  <!-- BOARD -->
+  <div class="board-area">
+
+    <div
+    class="board"
+    id="board">
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+  
+const board =
+document.getElementById("board");
+
+const balanceText =
+document.getElementById("balance");
+
+const resultText =
+document.getElementById("result");
+
+const mineSlider =
+document.getElementById("mineSlider");
+
+const mineText =
+document.getElementById("mineText");
+
+const betInput =
+document.getElementById("betInput");
+
+const gridSlider =
+document.getElementById("gridSlider");
+
+const gridText =
+document.getElementById("gridText");
+
+const multiText =
+document.getElementById("multiText");
+
+/* BALANCE SYNC */
+let balance =
+localStorage.getItem("rouletteBalance")
+? Number(localStorage.getItem("rouletteBalance"))
+: 1000;
+
+balanceText.innerHTML = balance;
+
+/* PROFILE */
+let username =
+localStorage.getItem("rouletteUsername")
+|| "Guest";
+
+let level =
+Number(
+  localStorage.getItem("rouletteLevel")
+) || 1;
+
+let xp =
+Number(
+  localStorage.getItem("rouletteXP")
+) || 0;
+
+let minePositions = [];
+
+let gameActive = false;
+
+let currentBet = 0;
+
+let multiplier = 1;
+
+let openedTiles = 0;
+
+let gridSize = 5;
+
+let totalTiles = 25;
+
+/* SAVE BALANCE */
+function saveBalance(){
+
+  localStorage.setItem(
+    "rouletteBalance",
+    balance
+  );
+
+}
+
+/* UPDATE GRID */
+function updateGridText(){
+
+  gridSize =
+  Number(gridSlider.value);
+
+  totalTiles =
+  gridSize * gridSize;
+
+  gridText.innerHTML =
+  gridSize + " x " + gridSize;
+
+  mineSlider.max =
+  totalTiles - 1;
+
+  if(
+    Number(mineSlider.value)
+    >= totalTiles
+  ){
+    mineSlider.value =
+    totalTiles - 1;
+  }
+
+  updateMineText();
+
+  generateBoard();
+}
+
+/* UPDATE MINE */
+function updateMineText(){
+
+  mineText.innerHTML =
+  mineSlider.value;
+
+  generateBoard();
+}
+
+/* BET BUTTONS */
+function halfBet(){
+
+  let value =
+  Number(betInput.value);
+
+  value =
+  Math.floor(value / 2);
+
+  if(value < 1){
+    value = 1;
+  }
+
+  betInput.value = value;
+}
+
+function doubleBet(){
+
+  let value =
+  Number(betInput.value);
+
+  value *= 2;
+
+  if(value > balance){
+    value = balance;
+  }
+
+  betInput.value = value;
+}
+
+function maxBet(){
+
+  betInput.value = balance;
+}
+
+/* START GAME */
+function startGame(){
+
+  /* CEGAH SPAM BET */
+  if(gameActive){
+    return;
+  }
+
+  const bet =
+  Number(betInput.value);
+
+  if(isNaN(bet) || bet <= 0){
+
+    alert("Invalid bet!");
+
+    return;
+  }
+
+  if(bet > balance){
+
+    alert("Balance tidak cukup!");
+
+    return;
+  }
+
+  /* DISABLE BUTTON */
+  playBtn.disabled = true;
+
+  /* KURANGI BALANCE */
+  balance -= bet;
+
+  saveBalance();
+
+  balanceText.innerHTML =
+  balance;
+
+  /* XP */
+  addXP(
+    Math.floor(bet / 5)
+  );
+
+  currentBet = bet;
+
+  multiplier = 1;
+
+  openedTiles = 0;
+
+  gameActive = true;
+
+playBtn.disabled = true;
+
+  multiText.innerHTML =
+  "x1.00";
+
+  resultText.innerHTML = "";
+
+  generateBoard();
+}
+
+/* GENERATE BOARD */
+function generateBoard(){
+
+  board.innerHTML = "";
+
+  minePositions = [];
+
+  totalTiles =
+  gridSize * gridSize;
+
+  board.style.gridTemplateColumns =
+  `repeat(${gridSize}, 1fr)`;
+
+  const totalMines =
+  Number(mineSlider.value);
+
+  while(
+    minePositions.length < totalMines
+  ){
+
+    const random =
+    Math.floor(
+      Math.random() * totalTiles
+    );
+
+    if(
+      !minePositions.includes(random)
+    ){
+
+      minePositions.push(random);
+    }
+  }
+
+  for(let i = 0; i < totalTiles; i++){
+
+    const tile =
+    document.createElement("div");
+
+    tile.className = "tile";
+
+    const size =
+    700 / gridSize;
+
+    tile.style.width =
+    size + "px";
+
+    tile.style.height =
+    size + "px";
+
+    tile.dataset.index = i;
+
+    tile.onclick =
+    ()=> openTile(tile, i);
+
+    board.appendChild(tile);
+  }
+}
+
+/* OPEN TILE */
+function openTile(tile, index){
+
+  if(!gameActive){
+    return;
+  }
+
+  if(
+    tile.classList.contains("safe")
+    ||
+    tile.classList.contains("mine")
+  ){
+    return;
+  }
+
+  /* MINE */
+  if(
+    minePositions.includes(index)
+  ){
+
+    tile.classList.add("mine");
+
+    tile.innerHTML = "💣";
+
+    revealMines();
+
+    resultText.innerHTML =
+    "YOU LOSE";
+
+    resultText.className =
+    "result lose";
+
+    gameActive = false;
+
+playBtn.disabled = false;
+
+return;
+  }
+
+  /* SAFE */
+  tile.classList.add("safe");
+
+  tile.innerHTML = "💎";
+
+  openedTiles++;
+
+  const mines =
+  Number(mineSlider.value);
+
+  const riskFactor =
+  mines / totalTiles;
+
+  multiplier +=
+  0.15 +
+  (riskFactor * 2);
+
+  multiText.innerHTML =
+  "x" +
+  multiplier.toFixed(2);
+
+  resultText.innerHTML =
+  "SAFE TILE";
+
+  resultText.className =
+  "result win";
+}
+
+/* REVEAL */
+function revealMines(){
+
+  const tiles =
+  document.querySelectorAll(".tile");
+
+  tiles.forEach((tile, index)=>{
+
+    if(
+      minePositions.includes(index)
+    ){
+
+      tile.classList.add("mine");
+
+      tile.innerHTML = "💣";
+    }
+  });
+}
+
+/* CASHOUT */
+function cashout(){
+
+  if(!gameActive){
+    return;
+  }
+
+  const winnings =
+  Math.floor(
+    currentBet * multiplier
+  );
+
+  balance += winnings;
+
+  saveBalance();
+
+  balanceText.innerHTML = balance;
+
+  resultText.innerHTML =
+  "CASHOUT +" + winnings;
+
+  resultText.className =
+  "result win";
+
+  gameActive = false;
+  
+  playBtn.disabled = false;
+}
+
+/* LEVEL SYSTEM */
+function updateLevelUI(){
+
+  const needXP =
+  level * 100;
+
+  document.getElementById(
+    "levelText"
+  ).innerHTML = level;
+
+  document.getElementById(
+    "xpText"
+  ).innerHTML = xp;
+
+  document.getElementById(
+    "xpNeed"
+  ).innerHTML = needXP;
+
+  const percent =
+  (xp / needXP) * 100
+  ;
+
+  document.getElementById(
+    "xpFill"
+  ).style.width =
+  percent + "%";
+}
+
+function addXP(amount){
+
+  xp += amount;
+
+  let needXP =
+  level * 100
+  while(xp >= needXP){
+
+    xp -= needXP;
+
+    level++;
+
+    needXP =
+    level * 100;
+
+  }
+
+  /* SAVE GLOBAL */
+  localStorage.setItem(
+    "rouletteXP",
+    xp
+  );
+
+  localStorage.setItem(
+    "rouletteLevel",
+    level
+  );
+
+  updateLevelUI();
+}
+
+/* FIRST LOAD */
+document.getElementById(
+  "usernameText"
+).innerHTML = username;
+
+updateGridText();
+
+updateLevelUI();
+
+/* PLAY BUTTON */
+const playBtn =
+document.getElementById(
+  "playBtn"
+);
+
+// DATABASE PROMO
+const promoCodes = {
+
+  "YAZZBET": 500000,
+
+  "FREE100": 100000,
+
+  "WELCOME": 250000,
+
+  "CASEBET": 750000,
+
+  "PLAYERBARU": 1000000
+
+
+};
+
+/* OPEN PROMO */
+function openPromo(){
+
+  document
+  .getElementById("promoPopup")
+  .style.display = "flex";
+}
+
+/* CLOSE PROMO */
+function closePromo(){
+
+  document
+  .getElementById("promoPopup")
+  .style.display = "none";
+}
+
+/* CLAIM PROMO */
+function claimPromo(){
+
+  const code =
+  document
+  .getElementById("promoInput")
+  .value
+  .toUpperCase();
+
+  if(!promoCodes[code]){
+
+    alert("Promo tidak valid!");
+
+    return;
+  }
+
+  /* CHECK USED */
+  if(
+    localStorage.getItem(
+      "promo_" + code
+    )
+  ){
+
+    alert(
+      "Promo sudah digunakan!"
+    );
+
+    return;
+  }
+
+  const reward =
+  promoCodes[code];
+
+  balance += reward;
+
+  saveBalance();
+
+  balanceText.innerHTML =
+  balance;
+
+  localStorage.setItem(
+    "promo_" + code,
+    "used"
+  );
+
+  alert(
+    "Berhasil claim +" +
+    reward
+  );
+
+  closePromo();
+}
+
+</script>
+
+
+
+</body>
+</html>
